@@ -18,7 +18,8 @@ class Order(models.Model):
 
 
 class OrderStatus(models.Model):
-    name = models.CharField(max_length=200 , unique=True)
+    name = models.CharField(max_length=10 , unique=True)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

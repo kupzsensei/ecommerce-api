@@ -20,7 +20,10 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from order.views import OrderStatusView
+
 urlpatterns = [
+    path('order-status/', OrderStatusView.as_view()),
     path('admin/', admin.site.urls),
 ]
 
