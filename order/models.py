@@ -10,7 +10,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     note = models.TextField()
-    shipping_address = models.ForeignKey('ShippingAddress' , on_delete=models.CASCADE , null=True , blank=True)
+    shipping_address = models.ForeignKey('ShippingAddress' , on_delete=models.SET_NULL , null=True , blank=True)
 
     def __str__(self):
         return f'{self.cart} - {self.status}'
@@ -22,11 +22,12 @@ class OrderStatus(models.Model):
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.id} - {self.name}"
     
 class ShippingAddress(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     address = models.TextField()
+  
 
 
     def __str__(self):
