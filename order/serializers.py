@@ -32,6 +32,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderSerializerGet(serializers.ModelSerializer):
     user = UserSerializer()
     cart = CartSerializer()
+    shipping_address = ShippingAddressGetSerializer()
     class Meta:
         model = Order
         fields = "__all__"

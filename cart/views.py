@@ -14,8 +14,28 @@ class CartView(APIView):
     
     def post(self , request):
         data = request.data
-        serializer = PostCartSerializer(data={**data , "user": request.user.id})
+        print(data,  'cart data')
+        serializer = PostCartSerializer(data={"product": data['product'] , "quantity": data['quantity'] , "user": request.user.id})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
+    
+    def patch(self , request):
+        try:
+            instance = Cart.objects.get(id=request.data['id'])
+            serializer = PostCartSerializer(instance , data=request.data , partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"ok": True , 'data':serializer.data})
+            return Response({'ok': False , 'error': serializer.errors})
+        except Cart.DoesNotExist:
+            return Response({"detail": 'Product does not exist.'})
+    
+    def delete(self , request):
+        try:
+            instance = Cart.objects.get(id=request.data['id'])
+            instance.delete()
+            return Response({'ok': True , 'detail': "deleted"})
+        except Cart.DoesNotExist:
+            return Response({"detail": 'Product does not exist.'})
