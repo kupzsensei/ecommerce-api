@@ -31,7 +31,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderSerializerGet(serializers.ModelSerializer):
     user = UserSerializer()
-    cart = CartSerializer()
+    cart = CartSerializer(many=True)
     shipping_address = ShippingAddressGetSerializer()
     class Meta:
         model = Order

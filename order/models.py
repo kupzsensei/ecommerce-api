@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Order(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart , on_delete=models.CASCADE)
+    cart = models.ManyToManyField(Cart)
     status = models.ForeignKey('OrderStatus' , on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,6 +27,7 @@ class OrderStatus(models.Model):
 class ShippingAddress(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     address = models.TextField()
+    contact_number = models.CharField(max_length=16)
   
 
 

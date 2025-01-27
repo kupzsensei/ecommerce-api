@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from .models import OrderStatus , ShippingAddress , Order
 from .serializers import OrderStatusSerializer , ShippingAddressGetSerializer , ShippingAddressSerializer  , OrderSerializerGet , OrderSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly 
+from rest_framework.permissions import IsAuthenticated
+# from rest_framework.parsers import FormParser
 
 # Create your views here.
 class OrderStatusView(APIView):
@@ -92,19 +94,22 @@ class ShippingAddressView(APIView):
             return Response({"ok": False , "error" : "Walang ganyang data sa aming database!"})
 
 class OrderView(APIView):
-    
+    # parser_classes = [FormParser]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
-        data = Order.objects.all().order_by('-id')
+        user = request.user
+        data = Order.objects.filter(user=user).order_by('-id')
         serializer = OrderSerializerGet(data , many=True)
         return Response(serializer.data)
     
     def post(self , request):
         data = request.data
-        
-        serializer = OrderSerializer(data={**data, 'user': request.user.id})
+        print(data)
+        serializer = OrderSerializer(data={**data, "user": request.user.id})
         if serializer.is_valid():
             serializer.save()
             return Response({'ok': True , 'data': serializer.data})
+        print(serializer.errors)
         return Response({'ok': False , 'error': serializer.errors})
     
 
